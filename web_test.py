@@ -1,5 +1,5 @@
 import web
-
+# http://www.cnblogs.com/xiaowuyi/archive/2012/11/15/2771099.html
 urls = (
     '/(.*)', 'hello'
 )
