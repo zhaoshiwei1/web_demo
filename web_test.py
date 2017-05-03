@@ -2,6 +2,7 @@ import web
 from web import form
 # http://www.cnblogs.com/xiaowuyi/archive/2012/11/15/2771099.html
 # http://blog.csdn.net/freeking101/article/details/53020728
+# test git again with this comments
 render = web.template.render('templates/')
 urls = (
     # '/(.*)', 'index',
