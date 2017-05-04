@@ -3,6 +3,8 @@ from web import form
 # http://www.cnblogs.com/xiaowuyi/archive/2012/11/15/2771099.html
 # http://blog.csdn.net/freeking101/article/details/53020728
 # test git again with this comments
+db = web.database(dbn = 'mysql', user = 'root', pw='1234', db='test')
+# web.database, dbn 数据库类型 db 数据库名称
 render = web.template.render('templates/')
 urls = (
     # '/(.*)', 'index',
@@ -22,7 +24,7 @@ login = form.Form(
     form.Textarea('moe'),
     form.Dropdown('SEX', ['man', 'woman']),
     form.Radio('time',['2012-01-01','20120101']),
-    validators = [form.Validator("Passwords didn't match.", lambda i: i.password == i.password_again)]
+    validators = [form.Validator("Passwords didn't match.", lambda j: j.password == j.password_again)]
 )
 
 #
@@ -41,7 +43,8 @@ class home:
         if not f.validates():
             return render.formtest(f)
         else:
-            return "HAHA!"
+            testtables = db.select('testtable')
+            return render.index(testtables)
 
 if __name__ == "__main__":
     app.run()

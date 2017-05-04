@@ -1,5 +1,5 @@
-$def with (name)
-$if name:
-    I just wanted to say <em>hello</em> to $name.
-$else:
-    <em>Hello</em>, world!
+$def with (testtables)
+<ul>
+    $for testtable in testtables:
+    <li id="t$testtable.name">$testtable.name</li>
+</ul>
