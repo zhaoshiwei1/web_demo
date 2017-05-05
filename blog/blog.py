@@ -1,6 +1,7 @@
 import os
 import web
 import model
+# http://blog.csdn.net/dongnanyanhai/article/details/5607982 maybe it is my choice!
 
 urls = (
     '/', 'Index',
