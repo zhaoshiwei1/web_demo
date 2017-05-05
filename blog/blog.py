@@ -1,4 +1,4 @@
-
+import os
 import web
 import model
 
@@ -8,35 +8,16 @@ urls = (
     '/new', 'New',
     '/delete/(/d+)', 'Delete',
     '/edit/(/d+)', 'Edit',
-    '/login', 'Login',
-    '/logout', 'Logout',
 )
 app = web.application(urls, globals())
 
-t_globals = {
-    'datestr': web.datestr,
-    'cookie': web.cookies,
-}
-
-render = web.template.render('templates', base='base', globals=t_globals)
-
-login = web.form.Form(
-    web.form.Textbox('username'),
-    web.form.Password('password'),
-    web.form.Button('login')
-)
+root = os.path.dirname(__file__)
+render = web.template.render(os.path.join(root, '..', 'templates/'), base='base')
 
 class Index:
     def GET(self):
-        login_form = login()
         posts = model.get_posts()
-        return render.index(posts, login_form)
-    def POST(self):
-        login_form = login()
-        if login_form.validates():
-            if login_form.d.username == 'admin'and login_form.d.password == 'admin':
-                web.setcookie('username', login_form.d.username)
-        raise web.seeother('/')
+        return render.index(posts)
 
 class View:
     def GET(self, id):
@@ -83,11 +64,6 @@ class Edit:
         if not form.validates():
             return render.edit(post, form)
         model.update_post(int(id), form.d.title, form.d.content)
-        raise web.seeother('/')
-
-class Logout:
-    def GET(self):
-        web.setcookie('username', '', expires=-1)
         raise web.seeother('/')
 
 def notfound():
