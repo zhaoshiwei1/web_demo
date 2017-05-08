@@ -15,7 +15,7 @@ class index:
         rec = sdb.cu.execute("""SELECT * FROM WEB_TEST""")
         dbre = sdb.cu.fetchall()
         for i in dbre:
-            s = "<p>" + "<span>" + i[1] + "</sapn >" + "<span>" + i[2] + "</sapn >" + "<span>" + i[3] + "</span>"+"<span>" + i[3] + "</span>" +"</p>" + s
+            s = "<p>" + "<span>" + str(i[0]) + "</sapn >" + "<span>" + i[1] + "</sapn >" + "<span>" + i[2] + "</span>"+"<span>" + i[3] + "</span>" +"</p>" + s
 
         sh = """
         <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><HTML>
