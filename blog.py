@@ -36,7 +36,7 @@ class index:
             for j in range(len(i)):
                 s = s + """<td nowrap align="left">"""
                 if j ==0:
-                    s = s + """<INPUT TYPE="text" NAME="id" value = """+str(i[j])+""">"""
+                    s = s + """<INPUT TYPE="text" NAME="id" value = """+str(i[j])+""" disabled="true">"""
                 else:
                     s = s + str(i[j])
                 s = s + """</td>"""
