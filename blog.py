@@ -1,11 +1,16 @@
+#-*- coding: UTF-8 -*-
 import time
 import web
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 from model import *
 
 urls = (
     '/','index',
     '/add','add',
+    '/new','new'
     )
 
 class index:
@@ -14,21 +19,37 @@ class index:
         sdb = sqldb()
         rec = sdb.cu.execute("""SELECT * FROM WEB_TEST""")
         dbre = sdb.cu.fetchall()
+        col_name_list = [tuple[0] for tuple in rec.description]
+        s = s + """<table width="77%" border="0">"""
+        s = s + """<tr>"""
+        for l in col_name_list:
+            s = s + """<th align="left">"""
+            # 数据库列名拼接到表格中
+            s = s + l
+            s = s + """</th>"""
+        s = s + """<th align = "left">"""
+        s = s +""" </th>"""
+        s = s + """</tr>"""
         for i in dbre:
-            s = "<p>" + "<span>" + str(i[0]) + "</sapn >" + "<span>" + i[1] + "</sapn >" + "<span>" + i[2] + "</span>"+"<span>" + i[3] + "</span>" +"</p>" + s
-
+            s = s + """<tr>"""
+            for j in range(len(i)):
+                s = s + """<td nowrap align="left">"""
+                s = s + str(i[j])
+                s = s + """</td>"""
+            s = s + """<td>删除</td><td>修改</td>"""
+            s = s + """</tr>"""
+        s = s + """</table>"""
+        s = s + """
+        <form method="get" action="/new"><button type="submit"> 添加 </button></form>
+        """
         sh = """
         <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><HTML>
         <HEAD><meta http-equiv="X-UA-Compatible" content="IE=8" />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <TITLE> OK!</TITLE> </HEAD> <BODY><h1>Hello World!</h1>
+        <TITLE> 后台接口测试平台</TITLE> </HEAD> <BODY><h1>Welcome!</h1>
         """
         sb = """
-        <h2>add a note</h2>
-        <form method="post" action="/add">
-        UserName:<INPUT TYPE="text" NAME="uname"><br />
-        <textarea name="content" ROWS="20" COLS="60"></textarea><br />
-        <button type="submit">save</button></form></BODY></HTML>
+        </BODY></HTML>
         """
         s = sh + s + sb
         return s
@@ -39,13 +60,32 @@ class add:
         n = web.input('uname')
         date = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())
         sdb = sqldb()
-        t = (n.uname,date,i.content)
+        t = (n.uname,i.content,date)
         sdb.cu.execute('insert into WEB_TEST(NAME, CONTENT, DTIME) values(?,?,?)',t)
         sdb.conn.commit()
         return web.seeother('/')
     def GET(self):
         return web.seeother('/')
 
+class new:
+    def GET(self):
+        sh = """
+            <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><HTML>
+            <HEAD><meta http-equiv="X-UA-Compatible" content="IE=8" />
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+            <TITLE> 后台接口测试平台</TITLE> </HEAD> <BODY><h1>Welcome!</h1>
+            """
+        sb = """
+            </BODY></HTML>
+            """
+        s = """
+        <h2>新增</h2>
+            <form method="post" action="/add">
+            UserName:<INPUT TYPE="text" NAME="uname"><br />
+            <textarea name="content" ROWS="20" COLS="60"></textarea><br />
+            <button type="submit">save</button></form>
+        """
+        return sh+s+sb
 
 if __name__=="__main__":
     app = web.application(urls,globals())
