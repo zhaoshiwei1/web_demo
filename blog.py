@@ -10,7 +10,8 @@ from model import *
 urls = (
     '/','index',
     '/add','add',
-    '/new','new'
+    '/new','new',
+    '/delete', 'delete'
     )
 
 class index:
@@ -31,12 +32,15 @@ class index:
         s = s +""" </th>"""
         s = s + """</tr>"""
         for i in dbre:
-            s = s + """<tr>"""
+            s = s + """<tr><form action="" method = "post">"""
             for j in range(len(i)):
                 s = s + """<td nowrap align="left">"""
-                s = s + str(i[j])
+                if j ==0:
+                    s = s + """<INPUT TYPE="text" NAME="id" value = """+str(i[j])+""">"""
+                else:
+                    s = s + str(i[j])
                 s = s + """</td>"""
-            s = s + """<td>删除</td><td>修改</td>"""
+            s = s + """<td><button type="submit">编辑</button><button type="submit" formaction="/delete">删除</button></td></form>"""
             s = s + """</tr>"""
         s = s + """</table>"""
         s = s + """
@@ -85,7 +89,16 @@ class new:
             <textarea name="content" ROWS="20" COLS="60"></textarea><br />
             <button type="submit">save</button></form>
         """
-        return sh+s+sb
+        return sh + s + sb
+
+class delete:
+    def POST(self):
+        i = web.input('id')
+        print i.id
+        sdb = sqldb()
+        sdb.cu.execute('DELETE FROM web_test where ID ='+i.id)
+        sdb.conn.commit()
+        return web.seeother('/')
 
 if __name__=="__main__":
     app = web.application(urls,globals())
