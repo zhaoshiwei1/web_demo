@@ -19,7 +19,7 @@ class index:
     def GET(self):
         s = ""
         sdb = sqldb()
-        rec = sdb.cu.execute("""SELECT * FROM WEB_TEST""")
+        rec = sdb.cu.execute("""SELECT * FROM TEST""")
         dbre = sdb.cu.fetchall()
         col_name_list = [tuple[0] for tuple in rec.description]
         s = s + """<table width="77%" border="0">"""
@@ -33,15 +33,15 @@ class index:
         s = s +""" </th>"""
         s = s + """</tr>"""
         for i in dbre:
-            s = s + """<tr><form action="" method = "post">"""
+            s = s + """<tr>"""
             for j in range(len(i)):
                 s = s + """<td nowrap align="left">"""
                 if j ==0:
-                    s = s + """<INPUT TYPE="text" NAME="id" value = """+str(i[j])+""" disabled="true">"""
+                    s = s + """<form action = "/delete" method = "post"><button type = "submit">DEL</button><INPUT TYPE="text" NAME="id" value = """+str(i[j])+"""></form>"""
                 else:
                     s = s + str(i[j])
                 s = s + """</td>"""
-            s = s + """<td><button type="submit">编辑</button><button type="submit" formaction="/delete">删除</button></td></form>"""
+            s = s + """<td>删除</td>"""
             s = s + """</tr>"""
         s = s + """</table>"""
         s = s + """
@@ -66,7 +66,7 @@ class add:
         date = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())
         sdb = sqldb()
         t = (n.uname,i.content,date)
-        sdb.cu.execute('insert into WEB_TEST(NAME, CONTENT, DTIME) values(?,?,?)',t)
+        sdb.cu.execute('insert into TEST(NAME, CONTENT, DTIME) values(?,?,?)',t)
         sdb.conn.commit()
         return web.seeother('/')
     def GET(self):
@@ -97,7 +97,7 @@ class delete:
         i = web.input('id')
         print i.id
         sdb = sqldb()
-        sdb.cu.execute('DELETE FROM web_test where ID ='+i.id)
+        sdb.cu.execute('DELETE FROM test where ID =' + i.id)
         sdb.conn.commit()
         return web.seeother('/')
 
